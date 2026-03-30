@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product['name'] }} — ShopWise{% endblock %}
+
+{% block content %}
+
+<div class="detail-page">
+    <div class="detail-container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-sep">›</span>
+            <span>{{ product['name'] }}</span>
+        </nav>
+
+        <div class="detail-layout">
+
+            <!-- ── Left: Image Gallery ── -->
+            <div class="gallery-col">
+
+                <!-- Main image display -->
+                <div class="gallery-main">
+                    {% if images %}
+                    <img
+                        id="mainImage"
+                        src="{{ url_for('static', filename=images[0]['image_path']) }}"
+                        alt="{{ product['name'] }}"
+                        class="gallery-main-img"
+                    >
+                    <button class="gallery-nav prev-btn" id="prevBtn" onclick="changeImage(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-nav next-btn" id="nextBtn" onclick="changeImage(1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <div class="image-counter" id="imageCounter">1 / {{ images|length }}</div>
+                    {% else %}
+                    <div class="gallery-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>No images available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Thumbnail strip -->
+                {% if images|length > 1 %}
+                <div class="gallery-thumbs" id="thumbStrip">
+                    {% for img in images %}
+                    <div
+                        class="thumb-wrap {% if loop.first %}active{% endif %}"
+                        onclick="selectImage({{ loop.index0 }})"
+                        id="thumb-{{ loop.index0 }}"
+                    >
+                        <img
+                            src="{{ url_for('static', filename=img['image_path']) }}"
+                            alt="View {{ loop.index }}"
+                            class="thumb-img"
+                        >
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- ── Right: Product Info ── -->
+            <div class="info-col">
+
+                <div class="product-badge">✨ Featured on ShopWise</div>
+                <h1 class="product-title">{{ product['name'] }}</h1>
+
+                <div class="product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-text">Highly Recommended</span>
+                </div>
+
+                <div class="product-description">
+                    <h3 class="desc-label">About this product</h3>
+                    <p class="desc-text">{{ product['description'] }}</p>
+                </div>
+
+                <div class="product-cta">
+                    <a
+                        href="{{ product['affiliate_link'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-daraz btn-large"
+                    >
+                        <i class="fas fa-shopping-bag"></i>
+                        Shop on Daraz
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+
+                    <p class="cta-note">
+                        <i class="fas fa-info-circle"></i>
+                        You'll be redirected to Daraz to complete your purchase.
+                    </p>
+                </div>
+
+                <div class="product-perks">
+                    <div class="perk-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Payment on Daraz</span>
+                    </div>
+                    <div class="perk-item">
+                        <i class="fas fa-undo"></i>
+                        <span>Easy Returns</span>
+                    </div>
+                    <div class="perk-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Fast Delivery</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Back button -->
+        <div class="back-section">
+            <a href="{{ url_for('index') }}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to All Products
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Image data for JS gallery -->
+<script>
+    const galleryImages = [
+        {% for img in images %}
+        "{{ url_for('static', filename=img['image_path']) }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}

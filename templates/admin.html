@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopWise Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <span>🛍️</span>
+            <div>
+                <span class="logo-name">ShopWise</span>
+                <span class="logo-sub">Admin Panel</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-link active" onclick="showSection('products')">
+                <i class="fas fa-box"></i> Products
+            </a>
+            <a href="#" class="sidebar-link" onclick="showSection('add')">
+                <i class="fas fa-plus-circle"></i> Add Product
+            </a>
+            <a href="{{ url_for('index') }}" class="sidebar-link" target="_blank">
+                <i class="fas fa-globe"></i> View Website
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <small>ShopWise © 2024</small>
+        </div>
+    </aside>
+
+    <!-- ── Main Panel ── -->
+    <main class="admin-main">
+
+        <!-- Header -->
+        <header class="admin-header">
+            <h1 class="admin-title" id="sectionTitle">All Products</h1>
+            <button class="btn-add-header" onclick="showSection('add')">
+                <i class="fas fa-plus"></i> Add New Product
+            </button>
+        </header>
+
+        <!-- Toast -->
+        <div id="adminToast" class="admin-toast"></div>
+
+        <!-- ── Section: Products List ── -->
+        <section id="section-products" class="admin-section active">
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <span class="stat-num">{{ products|length }}</span>
+                    <span class="stat-label">Total Products</span>
+                </div>
+            </div>
+
+            {% if products %}
+            <div class="admin-product-grid">
+                {% for product in products %}
+                <div class="admin-product-card" id="card-{{ product.id }}">
+                    <div class="apc-image">
+                        {% if product.primary_image %}
+                            <img src="{{ url_for('static', filename=product.primary_image) }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="apc-no-img"><i class="fas fa-image"></i></div>
+                        {% endif %}
+                    </div>
+                    <div class="apc-body">
+                        <h3 class="apc-title">{{ product.name }}</h3>
+                        <p class="apc-desc">{{ product.description[:80] }}{% if product.description|length > 80 %}…{% endif %}</p>
+                        <a href="{{ product.affiliate_link }}" target="_blank" class="apc-link">
+                            <i class="fas fa-link"></i> Daraz Link
+                        </a>
+                    </div>
+                    <div class="apc-actions">
+                        <button class="btn-edit" onclick="loadEditProduct({{ product.id }})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-delete" onclick="deleteProduct({{ product.id }}, '{{ product.name }}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" target="_blank" class="btn-view">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="admin-empty">
+                <div class="empty-icon">📦</div>
+                <h3>No products yet</h3>
+                <p>Click "Add New Product" to get started.</p>
+                <button class="btn-primary" onclick="showSection('add')">
+                    <i class="fas fa-plus"></i> Add First Product
+                </button>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- ── Section: Add Product ── -->
+        <section id="section-add" class="admin-section">
+            <div class="form-card">
+                <h2 class="form-card-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
+                <form id="addProductForm" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label for="add-name">Product Name <span class="req">*</span></label>
+                        <input type="text" id="add-name" name="name" placeholder="e.g. Sony WH-1000XM5 Headphones" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-desc">Description <span class="req">*</span></label>
+                        <textarea id="add-desc" name="description" rows="5" placeholder="Write a detailed product description..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-link">Daraz Affiliate Link <span class="req">*</span></label>
+                        <input type="url" id="add-link" name="affiliate_link" placeholder="https://www.daraz.pk/products/..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Images</label>
+                        <div class="upload-zone" id="addUploadZone" onclick="document.getElementById('add-images').click()">
+                            <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <p>Click to upload images<br><small>PNG, JPG, JPEG, GIF, WEBP — Max 16MB each</small></p>
+                            <input type="file" id="add-images" name="images" multiple accept="image/*" style="display:none" onchange="previewImages(this, 'addPreview')">
+                        </div>
+                        <div class="image-preview-grid" id="addPreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="showSection('products')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- ── Section: Edit Product ── -->
+        <section id="section-edit" class="admin-section">
+            <div class="form-card">
+                <h2 class="form-card-title"><i class="fas fa-edit"></i> Edit Product</h2>
+                <form id="editProductForm" enctype="multipart/form-data">
+                    <input type="hidden" id="edit-product-id">
+
+                    <div class="form-group">
+                        <label for="edit-name">Product Name <span class="req">*</span></label>
+                        <input type="text" id="edit-name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-desc">Description <span class="req">*</span></label>
+                        <textarea id="edit-desc" name="description" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-link">Daraz Affiliate Link <span class="req">*</span></label>
+                        <input type="url" id="edit-link" name="affiliate_link" required>
+                    </div>
+
+                    <!-- Existing images -->
+                    <div class="form-group">
+                        <label>Current Images</label>
+                        <p class="form-hint">Click ★ to set primary. Click 🗑 to delete.</p>
+                        <div class="existing-images-grid" id="existingImagesGrid"></div>
+                    </div>
+
+                    <!-- New images -->
+                    <div class="form-group">
+                        <label>Add More Images</label>
+                        <div class="upload-zone" id="editUploadZone" onclick="document.getElementById('edit-images').click()">
+                            <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                            <p>Click to upload more images</p>
+                            <input type="file" id="edit-images" name="images" multiple accept="image/*" style="display:none" onchange="previewImages(this, 'editPreview')">
+                        </div>
+                        <div class="image-preview-grid" id="editPreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="showSection('products')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Update Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirmModal" style="display:none">
+    <div class="modal-box">
+        <div class="modal-icon">⚠️</div>
+        <h3 id="modalTitle">Delete Product?</h3>
+        <p id="modalMessage">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn-danger" id="modalConfirmBtn">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

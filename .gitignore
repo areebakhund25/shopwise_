@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.Python
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Local data (do not commit)
+*.db
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

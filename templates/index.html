@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}ShopWise — Best Deals from Daraz{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero Banner ── -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-text">
+            <p class="hero-eyebrow">✨ Handpicked for you</p>
+            <h1 class="hero-title">Shop Smarter.<br>Live Better.</h1>
+            <p class="hero-subtitle">Discover curated deals and top-rated products, all in one place. One click to Daraz.</p>
+            <a href="#products" class="btn btn-hero">Browse Products <i class="fas fa-arrow-down"></i></a>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-blob"></div>
+            <img
+                src="{{ url_for('static', filename='images/gemini-hero.png') }}"
+                alt="Gemini generated hero visual"
+                class="hero-image"
+            >
+            <div class="floating-badge badge-1">🔥 Hot Deals</div>
+            <div class="floating-badge badge-2">⚡ Fast Delivery</div>
+            <div class="floating-badge badge-3">✅ Trusted</div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Products Section ── -->
+<section class="products-section" id="products">
+    <div class="section-container">
+
+        <div class="section-header">
+            {% if search_query %}
+                <h2 class="section-title">Results for "<em>{{ search_query }}</em>"</h2>
+                <p class="section-subtitle">{{ products|length }} product{{ 's' if products|length != 1 }} found</p>
+                <a href="{{ url_for('index') }}" class="clear-search">
+                    <i class="fas fa-times"></i> Clear search
+                </a>
+            {% else %}
+                <h2 class="section-title">Featured Products</h2>
+                <p class="section-subtitle">Hand-selected deals from Daraz — updated regularly</p>
+            {% endif %}
+        </div>
+
+        {% if products %}
+        <div class="products-grid" id="productsGrid">
+            {% for product in products %}
+            <article class="product-card" data-aos="fade-up">
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="card-image-link">
+                    <div class="card-image-wrap">
+                        {% if product.primary_image %}
+                            <img
+                                src="{{ url_for('static', filename=product.primary_image) }}"
+                                alt="{{ product.name }}"
+                                class="card-img"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="card-img-placeholder">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-overlay">
+                            <span class="overlay-text">View Details</span>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card-body">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="card-title-link">
+                        <h3 class="card-title">{{ product.name }}</h3>
+                    </a>
+                    <p class="card-desc">{{ product.description[:110] }}{% if product.description|length > 110 %}…{% endif %}</p>
+
+                    <div class="card-footer">
+                        <a
+                            href="{{ product.affiliate_link }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-daraz"
+                            onclick="trackClick({{ product.id }})"
+                        >
+                            <i class="fas fa-shopping-bag"></i>
+                            Shop on Daraz
+                            <i class="fas fa-external-link-alt btn-ext-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No products found</h3>
+            {% if search_query %}
+                <p>Try a different search term or <a href="{{ url_for('index') }}">browse all products</a>.</p>
+            {% else %}
+                <p>No products have been added yet. Check back soon!</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+<!-- ── Trust Section ── -->
+<section class="trust-section">
+    <div class="section-container">
+        <div class="trust-grid">
+            <div class="trust-item">
+                <div class="trust-icon">🛡️</div>
+                <h4>Verified Products</h4>
+                <p>Every product is manually reviewed before listing.</p>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">💰</div>
+                <h4>Best Prices</h4>
+                <p>We hunt for the best deals so you don't have to.</p>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">🔄</div>
+                <h4>Updated Daily</h4>
+                <p>New deals and products added every day.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

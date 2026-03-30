@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ShopWise — Smart Shopping, Better Deals{% endblock %}</title>
+
+    <!-- Google Fonts: Playfair Display + DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- ── Navigation ── -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">
+                <span class="logo-icon">🛍️</span>
+                <span class="logo-text">Shop<span class="logo-accent">Wise</span></span>
+            </a>
+
+            <div class="nav-search">
+                <form action="{{ url_for('index') }}" method="GET" class="search-form">
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Search products..."
+                        value="{{ request.args.get('q', '') }}"
+                        class="search-input"
+                    >
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('index') }}" class="nav-link">Deals</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ── -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-icon">🛍️</span>
+                <span class="logo-text">Shop<span class="logo-accent">Wise</span></span>
+                <p class="footer-tagline">Curated deals. Smart choices.</p>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 ShopWise.com — All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── Toast Notification ── -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Main JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
