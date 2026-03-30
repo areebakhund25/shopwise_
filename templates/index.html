@@ -72,7 +72,8 @@
                     <a href="{{ url_for('product_detail', product_id=product.id) }}" class="card-title-link">
                         <h3 class="card-title">{{ product.name }}</h3>
                     </a>
-                    <p class="card-desc">{{ product.description[:110] }}{% if product.description|length > 110 %}…{% endif %}</p>
+                    {% set card_preview = product.description.replace('\n', ' ').strip() %}
+                    <p class="card-desc">{{ card_preview[:110] }}{% if card_preview|length > 110 %}…{% endif %}</p>
 
                     <div class="card-footer">
                         <a

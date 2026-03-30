@@ -1,7 +1,7 @@
 # 🛍️ ShopWise — Affiliate Product Listing Website
 
 A clean, modern affiliate website built with Flask. Display Daraz products and
-redirect users via affiliate links. Manage everything from a hidden admin panel.
+redirect users via affiliate links. Products are managed manually in code.
 
 ---
 
@@ -9,23 +9,19 @@ redirect users via affiliate links. Manage everything from a hidden admin panel.
 
 ```
 shopwise/
-├── app.py                   # Flask backend (all routes + DB logic)
-├── database.db              # SQLite database (auto-created on first run)
+├── app.py                   # Flask backend (routes + manual product data)
 ├── requirements.txt         # Python dependencies
 ├── static/
 │   ├── css/
-│   │   ├── style.css        # Main website styles
-│   │   └── admin.css        # Admin panel styles
+│   │   └── style.css        # Main website styles
 │   ├── js/
 │   │   ├── main.js          # Homepage JS (toast, animations)
-│   │   ├── gallery.js       # Product detail image gallery
-│   │   └── admin.js         # Admin panel JS (CRUD operations)
+│   │   └── gallery.js       # Product detail image gallery
 │   └── images/              # Uploaded product images (auto-created)
 └── templates/
     ├── base.html            # Base layout with navbar + footer
     ├── index.html           # Homepage with product grid
     ├── product_detail.html  # Product detail + image gallery
-    ├── admin.html           # Hidden admin panel
     └── 404.html             # 404 error page
 ```
 
@@ -48,31 +44,21 @@ python app.py
 ### 3. Open in your browser
 
 - **Website:** http://127.0.0.1:5000
-- **Admin Panel:** http://127.0.0.1:5000/admin-1351954
 
 ---
 
-## ⚙️ Admin Panel Usage
+## ⚙️ Managing Products (Manual)
 
-Visit: `http://127.0.0.1:5000/admin-1351954`
-
-### Adding a Product
-1. Click **"Add New Product"** in the sidebar
-2. Fill in: Product Name, Description, Daraz Affiliate Link
-3. Upload one or more product images
-4. Click **"Save Product"**
-
-### Editing a Product
-1. Click **"Edit"** on any product card
-2. Update any field or add new images
-3. Click ⭐ on an image to set it as the primary (thumbnail) image
-4. Click 🗑 on an image to delete it
-5. Click **"Update Product"**
-
-### Deleting a Product
-1. Click **"Delete"** on a product card
-2. Confirm in the popup dialog
-3. The product and all its images are permanently removed
+1. Open `app.py`
+2. Edit the `PRODUCTS` list near the top of the file
+3. Add product objects with:
+   - `id` (unique integer)
+   - `name`
+   - `description`
+   - `affiliate_link`
+   - `images` (list like `["images/item1.jpg", "images/item2.jpg"]`)
+4. Put image files inside `static/images/`
+5. Restart Flask (or save with debug mode enabled)
 
 ---
 
@@ -98,7 +84,7 @@ For production use, consider:
    gunicorn -w 4 -b 0.0.0.0:8000 app:app
    ```
 3. **Add Nginx** as a reverse proxy for static files
-4. **Add authentication** to `/admin-1351954` if needed
+4. Add authentication and rate limiting if you later add private routes
 
 ---
 
@@ -107,7 +93,7 @@ For production use, consider:
 | Layer    | Technology         |
 |----------|--------------------|
 | Backend  | Python / Flask     |
-| Database | SQLite             |
+| Data     | Manual Python list |
 | Frontend | HTML5, CSS3, JS    |
 | Fonts    | Playfair + DM Sans |
 | Icons    | Font Awesome 6     |
@@ -116,7 +102,6 @@ For production use, consider:
 
 ## 📝 Notes
 
-- The admin panel at `/admin-1351954` is intentionally not linked anywhere on the public site
 - Product images are stored in `static/images/` with unique filenames
-- The SQLite database is auto-created at first run — no setup needed
+- No database is used; products are loaded from `PRODUCTS` in `app.py`
 - Search works across product names and descriptions

@@ -15,3 +15,7 @@ ENV/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Duplicate copies at repo root (canonical assets: static/images/)
+/p2.png
+/p3.png
