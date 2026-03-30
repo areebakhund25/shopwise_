@@ -115,5 +115,5 @@ def page_not_found(e):
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    print("ShopWise.com is running at http://127.0.0.1:5000")
+    print("ShopWise.com is running at http://127.0.0.1:5001")
     app.run(debug=True, host='0.0.0.0', port=5001)
