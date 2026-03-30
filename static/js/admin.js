@@ -80,7 +80,7 @@ document.getElementById('addProductForm')?.addEventListener('submit', async func
     const formData = new FormData(this);
 
     try {
-        const res = await fetch('/admin-secret/add', { method: 'POST', body: formData });
+        const res = await fetch('/admin-1351954/add', { method: 'POST', body: formData });
         const data = await res.json();
 
         if (data.success) {
@@ -106,7 +106,7 @@ async function loadEditProduct(productId) {
     showSection('edit');
 
     try {
-        const res = await fetch(`/admin-secret/edit/${productId}`);
+        const res = await fetch(`/admin-1351954/edit/${productId}`);
         const data = await res.json();
 
         document.getElementById('edit-product-id').value = data.id;
@@ -153,7 +153,7 @@ document.getElementById('editProductForm')?.addEventListener('submit', async fun
     const formData = new FormData(this);
 
     try {
-        const res = await fetch(`/admin-secret/edit/${productId}`, { method: 'POST', body: formData });
+        const res = await fetch(`/admin-1351954/edit/${productId}`, { method: 'POST', body: formData });
         const data = await res.json();
 
         if (data.success) {
@@ -174,7 +174,7 @@ document.getElementById('editProductForm')?.addEventListener('submit', async fun
 
 async function setPrimaryImage(imageId) {
     try {
-        const res = await fetch(`/admin-secret/set-primary/${imageId}`, { method: 'POST' });
+        const res = await fetch(`/admin-1351954/set-primary/${imageId}`, { method: 'POST' });
         const data = await res.json();
 
         if (data.success) {
@@ -203,7 +203,7 @@ async function deleteImage(imageId) {
     if (!confirm('Delete this image?')) return;
 
     try {
-        const res = await fetch(`/admin-secret/delete-image/${imageId}`, { method: 'DELETE' });
+        const res = await fetch(`/admin-1351954/delete-image/${imageId}`, { method: 'DELETE' });
         const data = await res.json();
 
         if (data.success) {
@@ -229,7 +229,7 @@ function deleteProduct(productId, productName) {
     document.getElementById('modalConfirmBtn').onclick = async () => {
         closeModal();
         try {
-            const res = await fetch(`/admin-secret/delete/${productId}`, { method: 'DELETE' });
+            const res = await fetch(`/admin-1351954/delete/${productId}`, { method: 'DELETE' });
             const data = await res.json();
 
             if (data.success) {

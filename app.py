@@ -142,13 +142,13 @@ def product_detail(product_id):
 
 # ─── Admin Routes ──────────────────────────────────────────────────────────────
 
-@app.route('/admin-secret')
+@app.route('/admin-1351954')
 def admin():
     """Hidden admin panel to manage products."""
     products = get_all_products()
     return render_template('admin.html', products=products)
 
-@app.route('/admin-secret/add', methods=['POST'])
+@app.route('/admin-1351954/add', methods=['POST'])
 def admin_add_product():
     """Add a new product with images."""
     name = request.form.get('name', '').strip()
@@ -185,7 +185,7 @@ def admin_add_product():
     db.commit()
     return jsonify({'success': True, 'product_id': product_id})
 
-@app.route('/admin-secret/edit/<int:product_id>', methods=['GET', 'POST'])
+@app.route('/admin-1351954/edit/<int:product_id>', methods=['GET', 'POST'])
 def admin_edit_product(product_id):
     """Edit existing product details and images."""
     db = get_db()
@@ -238,7 +238,7 @@ def admin_edit_product(product_id):
     db.commit()
     return jsonify({'success': True})
 
-@app.route('/admin-secret/delete-image/<int:image_id>', methods=['DELETE'])
+@app.route('/admin-1351954/delete-image/<int:image_id>', methods=['DELETE'])
 def admin_delete_image(image_id):
     """Delete a single product image."""
     db = get_db()
@@ -266,7 +266,7 @@ def admin_delete_image(image_id):
     db.commit()
     return jsonify({'success': True})
 
-@app.route('/admin-secret/delete/<int:product_id>', methods=['DELETE'])
+@app.route('/admin-1351954/delete/<int:product_id>', methods=['DELETE'])
 def admin_delete_product(product_id):
     """Delete a product and all its images."""
     db = get_db()
@@ -286,7 +286,7 @@ def admin_delete_product(product_id):
     db.commit()
     return jsonify({'success': True})
 
-@app.route('/admin-secret/set-primary/<int:image_id>', methods=['POST'])
+@app.route('/admin-1351954/set-primary/<int:image_id>', methods=['POST'])
 def admin_set_primary_image(image_id):
     """Set an image as the primary image for its product."""
     db = get_db()
@@ -311,5 +311,5 @@ if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     init_db()
     print("🚀 ShopWise.com is running at http://127.0.0.1:5000")
-    print("🔧 Admin panel: http://127.0.0.1:5000/admin-secret")
+    print("🔧 Admin panel: http://127.0.0.1:5000/admin-1351954")
     app.run(debug=True, host='0.0.0.0', port=5000)

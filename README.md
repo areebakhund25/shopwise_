@@ -48,13 +48,13 @@ python app.py
 ### 3. Open in your browser
 
 - **Website:** http://127.0.0.1:5000
-- **Admin Panel:** http://127.0.0.1:5000/admin-secret
+- **Admin Panel:** http://127.0.0.1:5000/admin-1351954
 
 ---
 
 ## ⚙️ Admin Panel Usage
 
-Visit: `http://127.0.0.1:5000/admin-secret`
+Visit: `http://127.0.0.1:5000/admin-1351954`
 
 ### Adding a Product
 1. Click **"Add New Product"** in the sidebar
@@ -98,7 +98,7 @@ For production use, consider:
    gunicorn -w 4 -b 0.0.0.0:8000 app:app
    ```
 3. **Add Nginx** as a reverse proxy for static files
-4. **Add authentication** to `/admin-secret` if needed
+4. **Add authentication** to `/admin-1351954` if needed
 
 ---
 
@@ -116,7 +116,7 @@ For production use, consider:
 
 ## 📝 Notes
 
-- The admin panel at `/admin-secret` is intentionally not linked anywhere on the public site
+- The admin panel at `/admin-1351954` is intentionally not linked anywhere on the public site
 - Product images are stored in `static/images/` with unique filenames
 - The SQLite database is auto-created at first run — no setup needed
 - Search works across product names and descriptions
